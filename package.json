@@ -11,12 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chrome-launcher": "^0.15.0",
     "fs": "^0.0.1-security",
-    "lighthouse": "^9.2.0",
+    "lighthouse": "^9.3.1",
     "open": "^8.4.0",
     "path": "^0.12.7",
     "puppeteer": "^13.1.1",
     "puppeteer-core": "^13.1.1",
-    "url": "^0.11.0"
+    "request": "^2.88.2",
+    "url": "^0.11.0",
+    "util": "^0.12.4"
   }
 }
