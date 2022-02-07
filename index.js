@@ -1,5 +1,4 @@
-import fs from 'fs';
-import open from 'open';
+ import fs from 'fs';
 import path from 'path';
 import chromeLauncher from 'chrome-launcher';
 import puppeteer from 'puppeteer';
@@ -8,7 +7,8 @@ import request from 'request';
 import { fileURLToPath } from 'url';
 import util from 'util';
 import config from 'lighthouse/lighthouse-core/config/desktop-config.js';
-const log = console.log;
+import { makeFolder, dateFolderName, log } from './helper/index.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -30,7 +30,8 @@ const __dirname = path.dirname(__filename);
     return JSON.stringify(str,null, 2);
   }
 
-  async function generateReport(url,idx) {
+  async function generateReport(url,idx, dirNameDay) {
+    makeFolder(`${__dirname}/report/${dirNameDay}`);
     const domain = `list${idx}`;
     const opts = {
       chromeFlags: ['--headless'],
@@ -51,23 +52,24 @@ const __dirname = path.dirname(__filename);
     // Run Lighthouse.
     const {lhr}  = await lighthouse(url, opts, config);
     const reportScore = Object.values(lhr.categories).map(c => {
-      scoreArray.push({url: url, id: c.id, score: c.score});
+      scoreArray.push({url: url, score: c.score});
       return {url: url, id: c.id, score: c.score};
     });
     
-    fs.writeFileSync(`${__dirname}/report/${domain}.json`, JSON.stringify(reportScore, null, 2));
+    fs.writeFileSync(`${__dirname}/report/${dirNameDay}/${domain}.json`, JSON.stringify(reportScore, null, 2));
     await browser.disconnect();
     await chrome.kill();
   }  
   
   async function main() {
+    const dirNameDay = dateFolderName();
     const tasks = await sitesInfo();
     let idx = 0;
     for(const task of tasks) {      
-      await generateReport(task, idx);
+      await generateReport(task, idx, dirNameDay);
       idx++;
     }
-    fs.writeFileSync(`${__dirname}/report/scoreArray.json`, JSON.stringify(scoreArray, null, 2));
+    fs.writeFileSync(`${__dirname}/report/${dirNameDay}/scoreArray.json`, JSON.stringify(scoreArray, null, 2));
   }
   main();
 
