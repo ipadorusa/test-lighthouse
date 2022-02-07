@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "chrome-launcher": "^0.15.0",
     "fs": "^0.0.1-security",
     "lighthouse": "^9.3.1",
