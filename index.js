@@ -14,8 +14,14 @@ const __dirname = path.dirname(__filename);
 
 
 (async() => {  
-  let sites = [];
-  let scoreArray = [];
+  let sites = []; //site.txt에서 주소 받아와서 받을 변수
+  let scoreArray = []; //전체 url별 lighthouse 점수 저장할 변수 
+  
+  /**
+   * sitesInfo에서 txt 파일정리
+   * @returns { String }
+   */
+  
   async function sitesInfo() {
     try {
       const contents = fs.readFileSync('site.txt', 'utf-8');
