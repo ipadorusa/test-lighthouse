@@ -7,7 +7,7 @@ import request from 'request';
 import { fileURLToPath } from 'url';
 import util from 'util';
 import config from 'lighthouse/lighthouse-core/config/desktop-config.js';
-import { makeFolder, dateFolderName, log } from './helper/index.js';
+import { makeFolder, dateFolderGen, deleteFolder, log } from './helper/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,7 +31,8 @@ const __dirname = path.dirname(__filename);
   }
 
   async function generateReport(url,idx, dirNameDay) {
-    makeFolder(`${__dirname}/report/${dirNameDay}`);
+    
+    
     const domain = `list${idx}`;
     const opts = {
       chromeFlags: ['--headless'],
@@ -62,7 +63,11 @@ const __dirname = path.dirname(__filename);
   }  
   
   async function main() {
-    const dirNameDay = dateFolderName();
+    const dirNameDay = dateFolderGen();
+
+    deleteFolder(`${__dirname}/report/${dirNameDay}`);
+    makeFolder(`${__dirname}/report/${dirNameDay}`);
+    
     const tasks = await sitesInfo();
     let idx = 0;
     for(const task of tasks) {      
